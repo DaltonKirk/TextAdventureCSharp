@@ -28,3 +28,7 @@ F:\Uni work\TextAdventure\TextAdventure - Dalton Kirk\TextAdventure\obj\Debug\Te
 F:\Uni work\TextAdventure\TextAdventure - Dalton Kirk\TextAdventure\bin\Debug\TextAdventure.exe
 F:\Uni work\TextAdventure\TextAdventure - Dalton Kirk\TextAdventure\bin\Debug\TextAdventure.pdb
 F:\Uni work\TextAdventure\TextAdventure - Dalton Kirk\TextAdventure\obj\Debug\TextAdventure.csprojResolveAssemblyReference.cache
+C:\Users\dkirk\Documents\CommandTemplate\TextAdventureCSharp\TextAdventure - Dalton Kirk\TextAdventure\bin\Debug\TextAdventure.exe.config
+C:\Users\dkirk\Documents\CommandTemplate\TextAdventureCSharp\TextAdventure - Dalton Kirk\TextAdventure\bin\Debug\TextAdventure.XML
+C:\Users\dkirk\Documents\CommandTemplate\TextAdventureCSharp\TextAdventure - Dalton Kirk\TextAdventure\obj\Debug\TextAdventure.exe
+C:\Users\dkirk\Documents\CommandTemplate\TextAdventureCSharp\TextAdventure - Dalton Kirk\TextAdventure\obj\Debug\TextAdventure.pdb
