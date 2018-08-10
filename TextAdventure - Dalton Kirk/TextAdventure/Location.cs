@@ -14,7 +14,6 @@ namespace TextAdventure
         private List<Exit> exits;
 		private List<Item> inventory;
 		private List<Enemy> enemies;
-        Enemy enemy = new Enemy();
 
         public Location()
         {

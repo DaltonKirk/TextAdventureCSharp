@@ -43,7 +43,7 @@ namespace TextAdventure
         Item axe = new Item();
         Item stick = new Item();
         Item healthPotion = new Item();
-        Enemy rat = new Enemy();
+        Enemy rat = new Enemy("Rat", 2, 1);
 
 
 
@@ -505,11 +505,8 @@ namespace TextAdventure
             {
                 Console.WriteLine("You tie the rope to the top of the well and throw the rest down.");
                 currentLocation.addExit(new Exit(Exit.Directions.Down, l10));
-                Enemy troll = new Enemy();
-                troll.name = "Troll";
+                Enemy troll = new Enemy("Troll", 9, 5);
                 l10.addEnemy(troll);
-                troll.damage = 5;
-                troll.health = 9;
                 playerInventory.RemoveItem(rope);
 
                 return;
