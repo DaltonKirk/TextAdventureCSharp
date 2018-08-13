@@ -12,8 +12,8 @@ namespace TextAdventure
         private string roomTitle;
         private string roomDescription;
         private List<Exit> exits;
-		private List<Item> inventory;
 		private List<Enemy> enemies;
+        public  Inventory inventory = new Inventory(10);
 
         public Location()
         {
@@ -21,7 +21,6 @@ namespace TextAdventure
 			roomTitle = "";
 			roomDescription = "";
 			exits = new List<Exit>();
-			inventory = new List<Item>();
 			enemies = new List<Enemy>();
         }
 
@@ -30,7 +29,6 @@ namespace TextAdventure
 			roomTitle = title;
 			roomDescription = "";
 			exits = new List<Exit>();
-			inventory = new List<Item>();
             enemies = new List<Enemy>();
 
         }
@@ -40,7 +38,6 @@ namespace TextAdventure
 			roomTitle = title;
 			roomDescription = description;
 			exits = new List<Exit>();
-			inventory = new List<Item>();
             enemies = new List<Enemy>();
 		}
 
@@ -70,30 +67,30 @@ namespace TextAdventure
 
 		public List<Item> getInventory()
 		{
-			return new List<Item>(inventory);
+		    return inventory.GetItems();
 		}
 
 		public void addItem(Item itemToAdd)
 		{
-			inventory.Add(itemToAdd);
+			inventory.AddItem(itemToAdd);
 		}
 
 		public void removeItem(Item itemToRemove)
 		{
-			if ( inventory.Contains(itemToRemove) )
+			if ( inventory.GetItems().Contains(itemToRemove) )
 			{
-				inventory.Remove(itemToRemove);
+				inventory.RemoveItem(itemToRemove);
 			}
 		}
 
 		public Item takeItem(string name)
 		{
-			foreach ( Item _item in inventory )
+			foreach ( Item _item in inventory.GetItems() )
 			{
                 if (_item.name == name)
 				{
 					Item temp = _item;
-					inventory.Remove(temp);
+					inventory.RemoveItem(temp);
 					return temp;
 				}
 			}

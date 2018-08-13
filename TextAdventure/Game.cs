@@ -10,8 +10,6 @@ namespace TextAdventure
 	{
 		Location currentLocation;
 
-        Item playerInventory;
-
 		public bool isRunning = true;
 
         private string firstItem;
@@ -24,7 +22,8 @@ namespace TextAdventure
 
         public bool dead;
 
-        private List<Item> inventory;
+        private Inventory inventory = new Inventory(10);
+        
         //making new locations, setting the title and description.
         Location l5 = new Location("Old Storage Room", "A few old boxes lay in the room covered with dust");
         Location l4 = new Location("Main hallway", "The walls are bare and theres nothing in here. Theres a door to the north,\nit looks rotten and easily breakable.");
@@ -49,8 +48,6 @@ namespace TextAdventure
 
         public Game()
 		{
-			inventory = new List<Item>();
-            playerInventory = new Item();
             playerHealth = 10;
             
 			Console.WriteLine("Welcome to Adventure Game. Enter \"Help\" to see list of commands.");
@@ -174,31 +171,10 @@ namespace TextAdventure
 			Console.WriteLine("\nInvalid command, are you confused?\n");
 		}
 
-		private void showInventory()
-		{
-			if ( playerInventory.getInventory().Count > 0 )
-			{
-				Console.WriteLine("\nA quick look in your bag reveals the following:\n");
-
-                foreach (Item item in playerInventory.getInventory() )
-				{
-					Console.WriteLine(item.name);
-				}
-			}
-			else
-			{
-				Console.WriteLine("Your bag is empty.");
-			}
-
-			Console.WriteLine("");
-		}
-
         public void Update()
 
 
         {
-
-
             // if they character dies, disable the input, to prevent the game contiuning 
             while (dead)
             {
@@ -221,7 +197,7 @@ namespace TextAdventure
             #region inventoryCommand
             if (currentCommand == "inventory" || currentCommand == "i")
             {
-                showInventory();
+                inventory.PrintItems();
                 return;
             }
             #endregion inventoryCommand
@@ -230,21 +206,22 @@ namespace TextAdventure
             // if player types add then it will take "add " from the string and check what is left.
             if (currentCommand.Contains("take"))
             {
+                var roomItems = currentLocation.getInventory();
                 currentCommand = currentCommand.Remove(0, 5);
                 // if what is left of the string is equal to an item in the current location remove it and add to player inventory
-                for (int i = 0; i < currentLocation.getInventory().Count; i++)
+                for (int i = 0; i < roomItems.Count; i++)
                 {
-                    if (currentLocation.getInventory()[i].name == currentCommand && currentLocation.getInventory()[i].canAdd == true)
+                    if (roomItems[i].name == currentCommand && roomItems[i].canAdd == true)
                     {
 
 
                         Item takenItem = currentLocation.takeItem(currentCommand);
-                        playerInventory.AddItem(takenItem);
+                        inventory.AddItem(takenItem);
                         Console.Clear();
                         showLocation();
                         return;
                     }
-                    else if (currentLocation.getInventory()[i].name == currentCommand && currentLocation.getInventory()[i].canAdd == false)
+                    else if (roomItems[i].name == currentCommand && roomItems[i].canAdd == false)
                     {
                         Console.WriteLine("You can't pick up that item!");
                         return;
@@ -263,11 +240,12 @@ namespace TextAdventure
             {
                 currentCommand = currentCommand.Remove(0, 4);
                 // if what is left of the string is equal to an item in the current player inventory
-                if (playerInventory.getInventory().Count > 0)
+                var items = inventory.GetItems();
+                if (items.Count > 0)
                 {
-                    for (int i = 0; i < playerInventory.getInventory().Count; i++)
+                    for (int i = 0; i < items.Count; i++)
                     {
-                        if (playerInventory.getInventory()[i].name == currentCommand)
+                        if (items[i].name == currentCommand)
                         {
                             Console.WriteLine("What do you want to use that with?");
                             secondItem = Console.ReadLine();
@@ -371,15 +349,16 @@ namespace TextAdventure
             #endregion MoveCommand
             #region AttackCommand
             // if the player enters "attack" and there are enemies in the room do the following.
-            if (currentCommand == "attack" && currentLocation.getEnemies().Count > 0 && playerInventory.getInventory().Count > 0)
+            var itemsForAttack = inventory.GetItems();
+            if (currentCommand == "attack" && currentLocation.getEnemies().Count > 0 && itemsForAttack.Count > 0)
             {
                 //ask what the player wants to use then set that to chosen weapon
                 Console.WriteLine("What do you want to attack with?");
                 chosenWeapon = Console.ReadLine();
                 //check the player has that item and if they do set the current weapon stats to that items stats
-                for (int i = 0; i < playerInventory.getInventory().Count; i++)
+                for (int i = 0; i < itemsForAttack.Count; i++)
                 {
-                    if (playerInventory.getInventory()[i].name == chosenWeapon)
+                    if (itemsForAttack[i].name == chosenWeapon)
                     {
                         SetWeaponStats();
                         //for every enemy, deal weapon damage, take damage from enemy, display damage dealt by both parties
@@ -436,11 +415,11 @@ namespace TextAdventure
                 //if they enter this command check if they have a health potion if they do remove it and then add to player health, if not dispay message
             if (currentCommand == "drink potion")
             {
-                for (int i = 0; i < playerInventory.getInventory().Count; i++)
+                for (int i = 0; i < itemsForAttack.Count; i++)
                 {
-                    if (playerInventory.getInventory()[i].name == "Health Potion")
+                    if (itemsForAttack[i].name == "Health Potion")
                     {
-                        playerInventory.RemoveItem(healthPotion);
+                        inventory.RemoveItem(healthPotion);
                         playerHealth += 5;
                         return;
                     }
@@ -507,7 +486,7 @@ namespace TextAdventure
                 currentLocation.addExit(new Exit(Exit.Directions.Down, l10));
                 Enemy troll = new Enemy("Troll", 9, 5);
                 l10.addEnemy(troll);
-                playerInventory.RemoveItem(rope);
+                l9.removeItem(rope);
 
                 return;
             }
@@ -524,7 +503,7 @@ namespace TextAdventure
             {
                 Item key = new Item();
                 key.name = "key";
-                playerInventory.AddItem(key);
+                inventory.AddItem(key);
                 Console.WriteLine("You found a key in the box!");
                 box.isEmpty = true;
                 return;
@@ -534,9 +513,9 @@ namespace TextAdventure
                 Console.WriteLine("You open the chest and find 3 Health Potions.");
                 
                 healthPotion.name = "Health Potion";
-                playerInventory.AddItem(healthPotion);
-                playerInventory.AddItem(healthPotion);
-                playerInventory.AddItem(healthPotion);
+                inventory.AddItem(healthPotion);
+                inventory.AddItem(healthPotion);
+                inventory.AddItem(healthPotion);
                 chest.isEmpty = true;
                 return;
             }
