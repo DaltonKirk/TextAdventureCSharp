@@ -1,133 +1,131 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TextAdventure
 {
-    class Location
+    /// <summary>
+    /// Class for locations.
+    /// </summary>
+    public class Location
     {
-        private string roomTitle;
-        private string roomDescription;
-        private List<Exit> exits;
-		private List<Enemy> enemies;
-        public  Inventory inventory = new Inventory(10);
+        private string Name { get; set; }
 
+        private string Description { get; set; }
+
+        private List<Exit> exits = new List<Exit>();
+
+        private List<Enemy> enemies = new List<Enemy>();
+
+        public Inventory inventory = new Inventory(10);
+
+        /// <summary>
+        /// Defualt contructor for Location class.
+        /// </summary>
         public Location()
         {
-            // Blank out the title and description at start
-			roomTitle = "";
-			roomDescription = "";
-			exits = new List<Exit>();
-			enemies = new List<Enemy>();
         }
 
-		public Location(string title)
-		{
-			roomTitle = title;
-			roomDescription = "";
-			exits = new List<Exit>();
-            enemies = new List<Enemy>();
-
+        /// <summary>
+        /// Creates a new location with the given title and description.
+        /// </summary>
+        /// <param name="title">Title of the location.</param>
+        /// <param name="description">Description of the location.</param>
+        public Location(string title = "", string description = "")
+        {
+            Name = title;
+            Description = description;
         }
 
-        public Location(string title, string description)
-		{
-			roomTitle = title;
-			roomDescription = description;
-			exits = new List<Exit>();
-            enemies = new List<Enemy>();
-		}
+        /// <summary>
+        /// returns room title.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Name;
+        }
 
+        public void AddExit(Exit exit)
+        {
+            exits.Add(exit);
+        }
 
-		public override string ToString()
-		{
-			return roomTitle;
-		}
+        public void RemoveExit(Exit exit)
+        {
+            if (exits.Contains(exit))
+            {
+                exits.Remove(exit);
+            }
+        }
 
-		public void addExit(Exit exit)
-		{
-			exits.Add(exit);
-		}
+        public List<Exit> GetExits()
+        {
+            return new List<Exit>(exits);
+        }
 
-		public void removeExit(Exit exit)
-		{
-			if (exits.Contains(exit))
-			{
-				exits.Remove(exit);
-			}
-		}
+        public List<Item> GetInventory()
+        {
+            return inventory.GetItems();
+        }
 
-		public List<Exit> getExits()
-		{
-			return new List<Exit>(exits);
-		}
+        public void AddItem(Item itemToAdd)
+        {
+            inventory.AddItem(itemToAdd);
+        }
 
-		public List<Item> getInventory()
-		{
-		    return inventory.GetItems();
-		}
+        public void RemoveItem(Item itemToRemove)
+        {
+            if (inventory.GetItems().Contains(itemToRemove))
+            {
+                inventory.RemoveItem(itemToRemove);
+            }
+        }
 
-		public void addItem(Item itemToAdd)
-		{
-			inventory.AddItem(itemToAdd);
-		}
-
-		public void removeItem(Item itemToRemove)
-		{
-			if ( inventory.GetItems().Contains(itemToRemove) )
-			{
-				inventory.RemoveItem(itemToRemove);
-			}
-		}
-
-		public Item takeItem(string name)
-		{
-			foreach ( Item _item in inventory.GetItems() )
-			{
+        public Item TakeItem(string name)
+        {
+            foreach (Item _item in inventory.GetItems())
+            {
                 if (_item.name == name)
-				{
-					Item temp = _item;
-					inventory.RemoveItem(temp);
-					return temp;
-				}
-			}
+                {
+                    Item temp = _item;
+                    inventory.RemoveItem(temp);
+                    return temp;
+                }
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public string getTitle()
-		{
-			return roomTitle;
-		}
+        public string GetTitle()
+        {
+            return Name;
+        }
 
-		public void setTitle(string title)
-		{
-			roomTitle = title;
-		}
+        public void SetTitle(string title)
+        {
+            Name = title;
+        }
 
-		public string getDescription()
-		{
-			return roomDescription;
-		}
+        public string GetDescription()
+        {
+            return Description;
+        }
 
-		public void setDescription(string description)
-		{
-			roomDescription = description;
-		}
+        public void SetDescription(string description)
+        {
+            Description = description;
+        }
 
-        public void addEnemy(Enemy enemyToAdd)
+        public void AddEnemy(Enemy enemyToAdd)
         {
             enemies.Add(enemyToAdd);
         }
 
-        public List<Enemy> getEnemies()
+        public List<Enemy> GetEnemies()
         {
             return new List<Enemy>(enemies);
         }
-        public void removeEnemy(Enemy enemyToRemove)
+
+        public void RemoveEnemy(Enemy enemyToRemove)
         {
             if (enemies.Contains(enemyToRemove))
             {
